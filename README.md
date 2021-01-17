@@ -1,3 +1,3 @@
-# Strapi application
+# Static Blog Strapi Backend
 
-A quick description of your strapi application
+Based on the tutorial at https://strapi.io/blog/build-a-static-blog-with-gatsby-typescript-and-strapi.
