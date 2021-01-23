@@ -9,6 +9,7 @@ module.exports = shipit => {
         default: {
             deployTo: '/home/deploy/' + appName,
             repositoryUrl: 'https://github.com/kmorning/strapi-blog-test.git',
+            branch: 'main',
             keepReleases: 5,
             shallowClone: true,
             shared: {
