@@ -85,7 +85,7 @@ module.exports = shipit => {
 
     shipit.blTask('copy-build', async () => {
         await shipit.local(
-            'rm -fr build && NODE_ENV=production yarn build'
+            'NODE_ENV=production yarn build --clean'
         ).then(
             ({ stdout }) => console.log(stdout)
         ).catch(
