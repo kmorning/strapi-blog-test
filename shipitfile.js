@@ -55,6 +55,7 @@ module.exports = shipit => {
                     cwd: '${shipit.releasePath}',
                     script: 'yarn',
                     args: 'start',
+                    interpreter: '/bin/bash',
                     watch: true,
                     autorestart: true,
                     restart_delay: 1000,
@@ -63,9 +64,10 @@ module.exports = shipit => {
                     },
                     env_production: {
                         NODE_ENV: 'production',
+                        ADMIN_JWT_SECRET: '${process.env.ADMIN_JWT_SECRET}',
                         DATABASE_HOST: '${process.env.DATABASE_HOST}',
                         DATABASE_PORT: '${process.env.DATABASE_PORT}',
-                        DATABASE_NAME: '${process.env.DATABASE_NAME},
+                        DATABASE_NAME: '${process.env.DATABASE_NAME}',
                         DATABASE_USERNAME: '${process.env.DATABASE_USERNAME}',
                         DATABASE_PASSWORD: '${process.env.DATABASE_PASSWORD}'
                     }
@@ -82,20 +84,20 @@ module.exports = shipit => {
     })
 
     shipit.blTask('copy-build', async () => {
-        shipit.local(
+        await shipit.local(
             'rm -fr build && NODE_ENV=production yarn build'
         ).then(
             ({ stdout }) => console.log(stdout)
         ).catch(
             ({ stderr }) => console.log(stderr)
         )
-        shipit.copyToRemote('build', shipt.releasePath)
+        await shipit.copyToRemote('build', shipit.releasePath)
     })
 
     shipit.blTask('pm2-server', async () => {
-        await shipit.remote(`pm2 delete -s ${appName} || :`)
+        await shipit.remote(`~/.yarn/bin/pm2 delete -s ${appName} || :`)
         await shipit.remote(
-            `pm2 start ${ecosystemFilePath} --env production --watch true`
+            `~/.yarn/bin/pm2 start ${ecosystemFilePath} --env production --watch true`
         )
     })
 }
